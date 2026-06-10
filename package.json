@@ -1,6 +1,6 @@
 {
   "name": "express-create-backend",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "CLI to scaffold a clean, minimal, and beginner-friendly Express.js + MongoDB backend starter boilerplate with JWT authentication and Socket.io.",
   "main": "index.js",
   "bin": {
