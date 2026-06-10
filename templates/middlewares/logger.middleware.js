@@ -1,39 +1,21 @@
 const logger = require("../config/logger");
 
+/**
+ * Middleware to log HTTP requests and responses.
+ * Logs only non-sensitive metadata to prevent PII leaks and performance overhead.
+ */
 const requestLogger = (req, res, next) => {
   const start = Date.now();
 
-  // Store original res.json
-  const oldJson = res.json;
-
-  res.json = function (data) {
-    // Log response here
+  // Log on response completion
+  res.on("finish", () => {
     const duration = Date.now() - start;
     logger.info(
       JSON.stringify({
         method: req.method,
-        url: req.originalUrl,
-        status: res.statusCode,
-        response: data, // actual response body
+        route: req.originalUrl || req.url,
+        statusCode: res.statusCode,
         responseTime: `${duration}ms`,
-        ip: req.ip,
-      }),
-    );
-
-    oldJson.apply(res, arguments); // call original res.json
-  };
-
-  // Handle errors
-  res.on("error", (err) => {
-    const duration = Date.now() - start;
-    logger.error(
-      JSON.stringify({
-        method: req.method,
-        url: req.originalUrl,
-        status: res.statusCode,
-        error: err.message,
-        responseTime: `${duration}ms`,
-        ip: req.ip,
       }),
     );
   });

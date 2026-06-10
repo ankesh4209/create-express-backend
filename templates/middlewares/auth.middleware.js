@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+const { verifyToken } = require("../utils/jwt.util");
 const User = require("../models/user.model");
 const { UnauthorizedError } = require("../errors/UnauthorizedError");
 const { NotFoundError } = require("../errors/NotFoundError");
@@ -12,7 +12,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = verifyToken(token);
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {

@@ -5,7 +5,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const { Server } = require("socket.io");
 
-const usersRoutes = require("./routes/users.routes");
+const userRoute = require("./routes/user.route");
 const errorHandler = require("./middlewares/error.middleware");
 const requestLogger = require("./middlewares/logger.middleware");
 const logger = require("./config/logger");
@@ -28,7 +28,7 @@ app.use(requestLogger); // custom logger instead of morgan
 // ========================
 // Routes
 // ========================
-app.use("/api/users", usersRoutes);
+app.use("/api/users", userRoute);
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "Backend Running 🚀" });
