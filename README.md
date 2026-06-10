@@ -1,211 +1,175 @@
-<h1>🚀 express-create-backend</h1>
+# 🚀 express-create-backend
 
-<h3>
-Scaffold a Production-Ready Express.js Backend in Seconds ⚡
-</h3>
+### Scaffold a Clean, Minimal, and Beginner-Friendly Express.js + MongoDB Backend Starter in Seconds ⚡
 
-<p>
-<code>npx express-create-backend my-app</code>
-</p>
+[![NPM Version](https://img.shields.io/npm/v/express-create-backend.svg)](https://www.npmjs.com/package/express-create-backend)
+[![NPM Downloads](https://img.shields.io/npm/dm/express-create-backend.svg)](https://www.npmjs.com/package/express-create-backend)
+[![GitHub Stars](https://img.shields.io/github/stars/ankesh4209/express-create-backend.svg)](https://github.com/ankesh4209/express-create-backend)
 
-<p>
-Fast • Secure • Scalable • Developer Friendly
-</p>
+`npx express-create-backend my-app`
+
+Fast • Secure • No Hidden Abstractions • Developer-Friendly • Ready to Hack
 
 ---
 
-## 🔥 About
+## ⚡ Why express-create-backend?
 
-express-create-backend is a powerful CLI tool to generate a modern, scalable, and production-ready Express.js backend with best practices built-in.
-
-Perfect for developers who want to skip boilerplate and start building real features fast.
+`express-create-backend` is an optimized CLI generator designed to scaffold a clean, beginner-friendly **Express.js backend starter** with MongoDB and JWT authentication. Unlike other generators, it avoids enterprise over-engineering, hidden middleware wrappers (`asyncHandler`), and complex design patterns. It uses only standard **async/await**, **try/catch** blocks, and explicit Node.js core patterns that any developer can understand in under 5 minutes.
 
 ---
 
 ## ✨ Features
 
-- JWT Authentication (Register / Login / Protected Routes)
-- MongoDB + Mongoose Setup
-- Socket.io Real-time Support
-- MVC + Service Layer Architecture
-- Custom Error Handling System
-- Logging (Winston + Morgan)
-- Security (Helmet, CORS)
-- Environment Config (.env ready)
-- Nodemon Dev Support
+- **Clean MVC Architecture**: Simplified structure with Models, Routes, and Controllers.
+- **JWT Authentication**: Explicit registration, login, and protected profile endpoint.
+- **MongoDB + Mongoose Setup**: Quick database integration out of the box.
+- **Manual Validations**: Easy-to-understand string and type verification without heavy external libraries.
+- **Lightweight Request Logging**: Console-based request/response logger tracking routes and latency.
+- **Socket.io Built-in**: Ready-to-go real-time WebSocket communication setup.
+- **Security Essentials**: Configured with Helmet and CORS headers.
+- **Nodemon Hot Reload**: Pre-configured scripts for local development.
 
 ---
 
-## ⚡ Installation & Usage
+## 📁 Scaffolded Project Structure
 
-### 🚀 Use via NPX (Recommended)
+The generated application follows a clean, single-responsibility folder layout with zero unused code:
 
-npx express-create-backend@latest my-backend-app
-
-OR
-
-npx express-create-backend my-backend-app
-
----
-
-### 🌍 Global Install
-
-npm install -g express-create-backend  
-express-create-backend my-backend-app
-
----
-
-### 🧪 Local Usage
-
-node index.js my-backend-app
-
----
-
-## 📁 Project Structure
-
+```text
 my-backend-app/
 ├── config/
+│   ├── database.js          # MongoDB connection configuration
+│   └── env.js              # Environment variables loader & validation
 ├── controllers/
-├── routes/
-├── services/
-├── models/
+│   ├── health.controller.js # Health check & system status controller
+│   └── user.controller.js   # User registration, login, and profile controllers
 ├── middlewares/
+│   └── logger.middleware.js # Standard console request/response logger
+├── models/
+│   └── user.model.js        # User model definition
+├── routes/
+│   ├── health.route.js      # Health endpoints
+│   └── user.route.js        # Authentication endpoints
 ├── utils/
-├── errors/
-├── .env
-├── package.json
-├── server.js
+│   ├── auth.util.js         # Inline user authentication helper
+│   └── jwt.util.js          # JWT sign & verify utility functions
+├── .env                     # Local environment variables configuration
+├── package.json             # Core scripts and dependencies
+└── server.js                # App entry point & Socket.io server configuration
+```
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start & Installation
 
-# 1. Create backend
+### 1. Scaffold Your Project (NPX Recommended)
 
+Create your new Express backend project directly without installing the CLI globally:
+
+```bash
 npx express-create-backend my-backend-app
+```
 
-# 2. Enter project
+### 2. Configure Environment
 
+Enter the project directory and check your `.env` file (the CLI generates a secure `JWT_SECRET` key for you automatically):
+
+```bash
 cd my-backend-app
+```
 
-# 3. Setup environment variables
+Verify your environment configuration:
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/localdb
+JWT_SECRET=your_secure_hex_key
+NODE_ENV=development
+```
 
-Update .env (MONGO_URI, JWT_SECRET)
+### 3. Start Developing
 
-# 4. Install dependencies
+Start the hot-reloading development server:
 
-npm install
-
-# 5. Run development server
-
+```bash
 npm run dev
+```
 
-Production:
-npm start
-
-URL:
-http://localhost:5000
-
-Response:
-{ "message": "Backend Running 🚀" }
+The server runs on [http://localhost:5000](http://localhost:5000).
 
 ---
 
-## 🔑 API Endpoints
+## 🔑 REST API Endpoints
 
-POST /api/users/register → Register user  
-POST /api/users/login → Login user  
-GET /api/users/me → Get profile (Protected)
+All JSON endpoints return a standardized success or error schema:
+
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/` | Verify server is running | No |
+| **GET** | `/api/health` | Retrieve system & DB health status | No |
+| **POST** | `/api/users/register` | Register a new user | No |
+| **POST** | `/api/users/login` | Log in existing user and return token | No |
+| **GET** | `/api/users/me` | Fetch user profile data | **Yes** (Bearer Token) |
+
+### JSON Schema Formats
+
+**Success Response (`200 OK`)**:
+```json
+{
+  "success": true,
+  "message": "User registered successfully",
+  "data": {
+    "user": {
+      "_id": "60d0fe4f5311236168a109ca",
+      "name": "Alex",
+      "email": "alex@example.com",
+      "createdAt": "2026-06-10T14:00:00.000Z",
+      "updatedAt": "2026-06-10T14:00:00.000Z"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}
+```
+
+**Error Response (`400/401/404/500`)**:
+```json
+{
+  "success": false,
+  "message": "Email already exists"
+}
+```
 
 ---
 
-## 🔌 Socket.io
+## 🔌 Socket.io Real-Time Support
 
-socket.on("message", (msg) => {
-io.emit("message", msg);
+Socket.io is configured out of the box in `server.js`. Test connections or listen/broadcast messages with ease:
+
+```javascript
+io.on("connection", (socket) => {
+  console.log(`Socket connected: ${socket.id}`);
+
+  socket.on("message", (msg) => {
+    io.emit("message", msg); // Broadcast message to all clients
+  });
 });
-
-Use cases:
-
-- Chat apps
-- Notifications
-- Live updates
-- Real-time dashboards
-
----
-
-## 🔐 Security
-
-- Helmet (secure headers)
-- JWT authentication (7 days expiry)
-- Password hashing (bcryptjs)
-- CORS enabled (configurable)
-- Custom error handling
+```
 
 ---
 
 ## 📦 Tech Stack
 
-Node.js  
-Express.js  
-MongoDB + Mongoose  
-Socket.io  
-jsonwebtoken  
-bcryptjs  
-winston + morgan  
-dotenv
+- **Framework**: Express.js
+- **Database**: MongoDB & Mongoose
+- **Security**: Helmet & CORS
+- **Real-Time**: Socket.io
+- **Auth**: Jsonwebtoken & Bcryptjs
 
 ---
 
-## 📈 SEO Keywords
+## ⭐ Support & Contributions
 
-express backend starter  
-node js api boilerplate  
-express js generator cli  
-mongodb backend template  
-jwt auth node js starter  
-socket.io backend example  
-secure express api starter  
-production ready node backend  
-express mvc architecture template
+If this boilerplate generator saved you time, please give it a ⭐ on [GitHub](https://github.com/ankesh4209/express-create-backend)! 
 
----
+Contributions, bug reports, and suggestions are always welcome. Feel free to open a Pull Request.
 
-## 🛠️ Improvements
-
-- Add validation (Joi / Zod)
-- Add rate limiting
-- Add refresh tokens
-- Restrict CORS in production
-- Setup logging rotation
-- Deploy on Render / Railway / Vercel
-
----
-
-## 🎯 Use Cases
-
-- SaaS backend
-- Startup MVP
-- REST API projects
-- Full-stack apps
-- Real-time apps
-- Developer portfolio
-
----
-
-## 💡 SEO Optimization Tips
-
-- 🔗 Repository Link: (https://github.com/ankesh4209/express-create-backend.git)
-- 🖼️ Add screenshots or demo GIF (image.png)
-- 🎥 Add demo video (YouTube / Loom)
-- 🏷️ Use GitHub topics: express, nodejs, backend, mongodb, jwt, api, boilerplate
-- 📈 Use keywords in title & description
-- ⭐ Encourage users to star ⭐ the repo
-- 📝 Keep README updated (important for ranking)
-- 🔍 Add use-cases and real-world examples
-
----
-
-🚀 **express-create-backend = Fast ⚡ Clean 🧼 Scalable 📈 Backend Development**
-
-Happy Coding 🚀
+Happy coding! 🚀
